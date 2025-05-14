@@ -67,6 +67,19 @@ Crop-Prediction-Application/
 
 ---
 
+Loading the Model from a Zip File
+Because the model is large and exceeds GitHub’s file size limit, it is zipped and stored in the backend.
+
+Steps to Use the Zipped Model:
+Find the zip file
+
+Location: Crop-Prediction-Application-Back-end/models/
+
+Example file: variety_model.zip
+
+Unzip the mode
+
+In app.py, load the model path like this : MODEL_PATH = 'models/model/variety_model.keras'
 ##  How to Run the App
 
 ### 1. Run the Backend (Flask)

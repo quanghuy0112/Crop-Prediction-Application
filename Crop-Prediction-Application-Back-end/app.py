@@ -13,7 +13,7 @@ CORS(app)  # Allows frontend on port 5173 to talk to this backend
 # Config
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-MODEL_PATH = 'models/final_Xception_model_task_2.keras'
+MODEL_PATH = 'models/final_Xception_model_task_2/final_Xception_model_task_2.keras'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
