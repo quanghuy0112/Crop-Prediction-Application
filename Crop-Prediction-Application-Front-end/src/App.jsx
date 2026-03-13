@@ -7,6 +7,7 @@ export default function CropPredictionPage() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [predictionType, setPredictionType] = useState('variety');
   const [predictionResult, setPredictionResult] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -34,20 +35,28 @@ export default function CropPredictionPage() {
     if (predictionType === 'variety') {
       endpoint = 'predict-variety';
     } else if (predictionType === 'disease') {
-      endpoint = 'predict-disease';
+      endpoint = 'predict-labels'; 
     } else if (predictionType === 'age') {
       endpoint = 'predict-age';
     }
 
     try {
+      setLoading(true);
       const response = await axios.post(`http://localhost:5000/${endpoint}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      setPredictionResult(response.data.prediction);// assuming backend returns { result: 'something' }
+      const result = response.data.prediction;
+      if (Array.isArray(result)) {
+        setPredictionResult(`Predicted Age(s): ${result.join(', ')}`);
+      } else {
+        setPredictionResult(`Prediction: ${result}`);
+      }
     } catch (error) {
       console.error('Prediction error:', error);
       alert('Prediction failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,8 +95,8 @@ export default function CropPredictionPage() {
                 />
               </div>
 
-              <button onClick={handlePredict} className="btn btn-success w-100 mb-3">
-                Upload & Predict
+              <button onClick={handlePredict} className="btn btn-success w-100 mb-3" disabled={loading}>
+                {loading ? 'Predicting...' : 'Upload & Predict'}
               </button>
 
               {previewUrl && (
@@ -98,7 +107,7 @@ export default function CropPredictionPage() {
 
               {predictionResult && (
                 <div className="alert alert-info text-center fw-bold">
-                  Prediction: {predictionResult}
+                  {predictionResult}
                 </div>
               )}
             </div>
